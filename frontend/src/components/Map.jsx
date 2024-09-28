@@ -10,12 +10,16 @@ import {
 import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import PropTypes from 'prop-types';
-import { userLocationAtom, selectedMarkerAtom } from '../state/atoms';
+import {
+  userLocationAtom,
+  selectedMarkerAtom,
+  selectedShelterAtom,
+} from '../state/atoms';
 import { formatDate } from '../utils/utils'; // Assuming you have a formatDate helper
 
 const libraries = ['places', 'visualization'];
 
-function Map({ disasterData }) {
+function Map({ disasterData, shelters }) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
     libraries,
@@ -23,11 +27,13 @@ function Map({ disasterData }) {
 
   const [userLocation, setUserLocation] = useAtom(userLocationAtom);
   const [selectedMarker, setSelectedMarker] = useAtom(selectedMarkerAtom);
+  const [selectedShelter, setSelectedShelter] = useAtom(selectedShelterAtom);
   const [map, setMap] = useState(null);
   const [markersData, setMarkersData] = useState([]);
   const [heatmapData, setHeatmapData] = useState([]);
   const [polygonData, setPolygonData] = useState([]);
   const [mapCenter, setMapCenter] = useState({ lat: 30.27, lng: -84.53 });
+  const [shelterMarkers, setShelterMarkers] = useState([]); // State for shelter markers
 
   // Debugging the selected marker
   useEffect(() => {
@@ -57,7 +63,11 @@ function Map({ disasterData }) {
         .filter(event => event.coordinates && event.coordinates[0]) // Ensure we have valid coordinates
         .map(event => {
           const coordinates = event.coordinates[0]; // Assume the first coordinate is valid
-          if (coordinates && typeof coordinates.lat === 'number' && typeof coordinates.lng === 'number') {
+          if (
+            coordinates &&
+            typeof coordinates.lat === 'number' &&
+            typeof coordinates.lng === 'number'
+          ) {
             return {
               id: event.id,
               position: coordinates,
@@ -67,8 +77,12 @@ function Map({ disasterData }) {
               severity: event.severity || 'Unknown severity',
               urgency: event.urgency || 'Unknown urgency',
               certainty: event.certainty || 'Unknown certainty',
-              effective: event.effective ? new Date(event.effective) : 'Unknown effective date',
-              expires: event.expires ? new Date(event.expires) : 'Unknown expiration date',
+              effective: event.effective
+                ? new Date(event.effective)
+                : 'Unknown effective date',
+              expires: event.expires
+                ? new Date(event.expires)
+                : 'Unknown expiration date',
             };
           }
           return null; // Skip this marker if coordinates are invalid
@@ -78,12 +92,33 @@ function Map({ disasterData }) {
     }
   }, [isLoaded, disasterData]);
 
+  useEffect(() => {
+    if (isLoaded && window.google) {
+      const formattedShelters = shelters
+        .filter(shelter => shelter.latitude && shelter.longitude) // Ensure valid coordinates
+        .map(shelter => ({
+          id: shelter.id,
+          position: { lat: shelter.latitude, lng: shelter.longitude },
+          name: shelter.name,
+          capacity: shelter.capacity,
+          currentOccupancy: shelter.current_occupancy,
+          address: shelter.address,
+        }));
+
+      setShelterMarkers(formattedShelters);
+    }
+  }, [isLoaded, shelters]);
+
   // Handle when a marker is selected
   useEffect(() => {
     if (!selectedMarker || !map) return;
 
     // Ensure the selectedMarker's position is valid before using panTo
-    if (selectedMarker.position && typeof selectedMarker.position.lat === 'number' && typeof selectedMarker.position.lng === 'number') {
+    if (
+      selectedMarker.position &&
+      typeof selectedMarker.position.lat === 'number' &&
+      typeof selectedMarker.position.lng === 'number'
+    ) {
       map.panTo(selectedMarker.position);
     }
 
@@ -101,6 +136,9 @@ function Map({ disasterData }) {
   // Function to handle marker clicks
   const handleMarkerClick = marker => {
     setSelectedMarker(marker);
+  };
+  const handleShelterMarkerClick = shelter => {
+    setSelectedShelter(shelter);
   };
 
   if (!isLoaded) {
@@ -165,6 +203,18 @@ function Map({ disasterData }) {
             />
           )}
 
+          {shelterMarkers.map(shelter => (
+            <Marker
+              key={shelter.id}
+              icon={{
+                url: 'https://cdn-icons-png.flaticon.com/512/195/195492.png', // Shelter icon
+                scaledSize: new window.google.maps.Size(30, 30),
+              }}
+              position={shelter.position}
+              onClick={() => handleShelterMarkerClick(shelter)} // Handle shelter marker clicks
+            />
+          ))}
+
           {selectedMarker && selectedMarker.id && (
             <InfoWindow
               position={selectedMarker.position}
@@ -204,6 +254,33 @@ function Map({ disasterData }) {
               </div>
             </InfoWindow>
           )}
+
+          {/* Shelter InfoWindow */}
+          {selectedShelter && selectedShelter.id && (
+            <InfoWindow
+              position={{
+                lat: selectedShelter.position.lat,
+                lng: selectedShelter.position.lng,
+              }}
+              onCloseClick={() => setSelectedShelter(null)} // Close the shelter info window
+            >
+              <div>
+                <Text fontWeight="bold" fontSize="md" mb={2}>
+                  {selectedShelter.name}
+                </Text>
+                <Text>
+                  <strong>Address:</strong> {selectedShelter.address}
+                </Text>
+                <Text>
+                  <strong>Capacity:</strong> {selectedShelter.capacity}
+                </Text>
+                <Text>
+                  <strong>Current Occupancy:</strong>{' '}
+                  {selectedShelter.currentOccupancy}
+                </Text>
+              </div>
+            </InfoWindow>
+          )}
         </GoogleMap>
       </Box>
     </Flex>
@@ -221,6 +298,17 @@ Map.propTypes = {
       ).isRequired,
       eventType: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  shelters: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      latitude: PropTypes.number.isRequired,
+      longitude: PropTypes.number.isRequired,
+      address: PropTypes.string.isRequired,
+      capacity: PropTypes.number.isRequired,
+      current_occupancy: PropTypes.number.isRequired,
     })
   ).isRequired,
 };
