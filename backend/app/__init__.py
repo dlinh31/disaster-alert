@@ -7,13 +7,13 @@ import os
 # Initialize SQLAlchemy
 db = SQLAlchemy()
 
-
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+    
+    # CORS setup to allow requests from localhost:5173
+    CORS(app=app, resources={r"*": {"origins": "*"}})
 
     load_dotenv()
-
     app.config.from_object('app.config.Config')
 
     db.init_app(app)
