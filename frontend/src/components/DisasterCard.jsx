@@ -23,11 +23,19 @@ const DisasterCard = ({ disasterData }) => {
 
   // Handle card click and set the selected marker
   const handleCardClick = disaster => {
+    console.log(disaster);
     const selectedMarker = {
       id: disaster.id,
       position: disaster.coordinates[0], // Assume first coordinate represents the marker position
       headline: disaster.title,
       coordinates: disaster.coordinates,
+      area: disaster.area,
+      description: disaster.description,
+      certainty: disaster.certainty,
+      severity: disaster.severity,
+      urgency: disaster.urgency,
+      effective: disaster.effective,
+      expires: disaster.expires,
     };
 
     setSelectedMarker(selectedMarker); // Update the selected marker

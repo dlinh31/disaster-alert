@@ -46,7 +46,6 @@ const Home = () => {
           expires: event.expires ? new Date(event.expires) : null, // Store expiration date as Date object
           coordinates: convertCoordinates(event.coordinates), // Convert and include coordinates
         }));
-        console.log('Formatted data:', formattedData)
 
         setDisasterData(formattedData);
         setLoading(false);
