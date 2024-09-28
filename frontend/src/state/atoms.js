@@ -5,3 +5,5 @@ export const userLocationAtom = atom(null);
 
 // Atom to store selected marker
 export const selectedMarkerAtom = atom(null);
+
+export const selectedShelterAtom = atom(null);
