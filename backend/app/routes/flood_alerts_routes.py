@@ -6,10 +6,10 @@ from app.models import User, Flood_Alert
 from datetime import datetime
 
 
-shelter_bp = Blueprint('shelter', __name__)
+flood_alert_bp = Blueprint('flood_alert', __name__)
 
 
-@shelter_bp.route('/api/get-api-key', methods=['GET'])
+@flood_alert_bp.route('/api/get-api-key', methods=['GET'])
 def get_api_key():
     if Config.GOOGLE_API_KEY:  # Check if the key is available
         return jsonify({"googleMapsApiKey": Config.GOOGLE_API_KEY})
@@ -17,7 +17,7 @@ def get_api_key():
         return jsonify({"error": "API key not found"}), 500
 
 
-@shelter_bp.route('/fetch-flood-warnings', methods=['GET'])
+@flood_alert_bp.route('/fetch-flood-warnings', methods=['GET'])
 def fetch_flood_warnings():
 
     try:
@@ -89,7 +89,7 @@ def fetch_flood_warnings():
         return jsonify({"error": str(e)}), 500
 
 
-@shelter_bp.route('/fetch-flood-alerts-from-db', methods=['GET'])
+@flood_alert_bp.route('/fetch-flood-alerts-from-db', methods=['GET'])
 def fetch_food_alerts_from_db():
     try:
         flood_alerts = Flood_Alert.query.all()
