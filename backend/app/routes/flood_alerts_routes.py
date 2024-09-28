@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 shelter_bp = Blueprint('shelter', __name__)
-
+RESULT_LIMIT = 200
 
 @shelter_bp.route('/api/get-api-key', methods=['GET'])
 def get_api_key():
@@ -19,7 +19,6 @@ def get_api_key():
 
 @shelter_bp.route('/fetch-flood-warnings', methods=['GET'])
 def fetch_flood_warnings():
-
     try:
         # Test onlyyyy
         Flood_Alert.query.delete()
@@ -31,7 +30,7 @@ def fetch_flood_warnings():
 
         data = response.json()
 
-        features = data['features'][:50]
+        features = data['features'][:RESULT_LIMIT]
         flood_alerts = []
 
         for i, feature in enumerate(features):
@@ -87,6 +86,7 @@ def fetch_flood_warnings():
 
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 500
+
 
 
 @shelter_bp.route('/fetch-flood-alerts-from-db', methods=['GET'])
