@@ -1,10 +1,12 @@
- 
-import React from "react";
-import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
-import Home from './views/Home'
-import { ChakraProvider } from '@chakra-ui/react'
-
-
+import React from 'react';
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from 'react-router-dom';
+import Home from './views/Home';
+import { ChakraProvider } from '@chakra-ui/react';
 
 // Correct the route structure
 const router = createBrowserRouter(
@@ -19,10 +21,8 @@ const router = createBrowserRouter(
 function App() {
   return (
     <ChakraProvider>
-
       <RouterProvider router={router} />
     </ChakraProvider>
-
   );
 }
 
