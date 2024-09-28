@@ -96,7 +96,7 @@ const Home = () => {
         <DisasterCard disasterData={disasterData} />
       </GridItem>
       <GridItem area={'main'}>
-        <Map disasterData={disasterData} /> {/* Pass disasterData to Map */}
+        <Map disasterData={disasterData} shelters={shelters} />
       </GridItem>
     </Grid>
   );
