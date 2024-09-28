@@ -23,6 +23,7 @@ function convertCoordinates(coordString) {
 const Home = () => {
   const [disasterData, setDisasterData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [shelters, setShelters] = useState([]);
 
   // Fetch the data from the API
   useEffect(() => {
@@ -53,11 +54,26 @@ const Home = () => {
         console.error('Error fetching data:', error);
         setLoading(false);
       }
+
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/shelters/`
+        );
+
+        // Map the data to the structure needed, storing dates as Date objects
+        setShelters(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
     };
 
     fetchData();
   }, []);
-
+  useEffect(() => {
+    console.log('Shelters:', shelters);
+  }, [shelters]);
   if (loading) {
     return <p>Loading...</p>;
   }
