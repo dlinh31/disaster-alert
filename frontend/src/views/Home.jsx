@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Map from '../components/Map';
 import DisasterCard from '../components/DisasterCard';
 import Navbar from '../components/Navbar';
 import { Grid, GridItem } from '@chakra-ui/react';
-import mockdata from '../assets/mockdata.json';
 
 // Helper function to convert the coordinates string into an array of LatLng objects
 function convertCoordinates(coordString) {
@@ -19,23 +19,64 @@ function convertCoordinates(coordString) {
   }
 }
 
+// Fetch disaster data and store dates as Date objects
 const Home = () => {
-  // Map the mockdata to create disasterData including coordinates
-  const [disasterData, setDisasterData] = useState(() =>
-    mockdata.map((event, index) => ({
-      id: event.id,
-      title: event.headline || `Disaster Title ${index + 1}`, // Use headline if available, otherwise default title
-      description: event.description || 'No description available', // Use description if available
-      area: event.areaDesc || 'No area specified', // Include area description
-      eventType: event.event || 'Unknown event', // Include the type of event
-      severity: event.severity || 'Unknown severity', // Include severity
-      urgency: event.urgency || 'Unknown urgency', // Include urgency
-      certainty: event.certainty || 'Unknown certainty', // Include certainty
-      effective: event.effective || 'No effective date', // Include effective date
-      expires: event.expires || 'No expiration date', // Include expiration date
-      coordinates: convertCoordinates(event.coordinates), // Convert and include coordinates
-    }))
-  );
+  const [disasterData, setDisasterData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [shelters, setShelters] = useState([]);
+
+  // Fetch the data from the API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/alerts/fetch-flood-alerts-from-db`
+        );
+
+        // Map the data to the structure needed, storing dates as Date objects
+        const formattedData = response.data.map((event, index) => ({
+          id: event.id,
+          title: event.headline || `Disaster Title ${index + 1}`, // Use headline if available, otherwise default title
+          description: event.description || 'No description available', // Use description if available
+          area: event.areaDesc || 'No area specified', // Include area description
+          eventType: event.event || 'Unknown event', // Include the type of event
+          severity: event.severity || 'Unknown severity', // Include severity
+          urgency: event.urgency || 'Unknown urgency', // Include urgency
+          certainty: event.certainty || 'Unknown certainty', // Include certainty
+          effective: event.effective ? new Date(event.effective) : null, // Store effective date as Date object
+          expires: event.expires ? new Date(event.expires) : null, // Store expiration date as Date object
+          coordinates: convertCoordinates(event.coordinates), // Convert and include coordinates
+        }));
+
+        setDisasterData(formattedData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/shelters/`
+        );
+
+        // Map the data to the structure needed, storing dates as Date objects
+        setShelters(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+  useEffect(() => {
+    console.log('Shelters:', shelters);
+  }, [shelters]);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <Grid
@@ -55,7 +96,7 @@ const Home = () => {
         <DisasterCard disasterData={disasterData} />
       </GridItem>
       <GridItem area={'main'}>
-        <Map disasterData={disasterData} /> {/* Pass disasterData to Map */}
+        <Map disasterData={disasterData} shelters={shelters} />
       </GridItem>
     </Grid>
   );
