@@ -71,7 +71,7 @@ class Shelter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     latitude = db.Column(db.Float, nullable=False)
-    longtitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
     address = db.Column(db.String(255), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
     current_occupancy = db.Column(db.Integer, default=0)
