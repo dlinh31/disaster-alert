@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Input, Flex, Text, Select } from '@chakra-ui/react'; // Import Select from Chakra UI
+import {
+  Box,
+  Input,
+  Flex,
+  Text,
+  Select,
+  Switch,
+  FormControl,
+  FormLabel,
+} from '@chakra-ui/react'; // Import Chakra components
 import { useAtom } from 'jotai';
 import { selectedMarkerAtom } from '../state/atoms';
 
 const DisasterCard = ({ disasterData }) => {
   const [selectedMarker, setSelectedMarker] = useAtom(selectedMarkerAtom); // Get selectedMarker from Jotai
 
-  // State for search term and urgency filter
+  // State for search term, urgency filter, and today filter
   const [searchTerm, setSearchTerm] = useState('');
   const [urgencyFilter, setUrgencyFilter] = useState('');
+  const [filterToday, setFilterToday] = useState(false); // State for the "Today" filter
 
   // Handle card click and set the selected marker
   const handleCardClick = disaster => {
@@ -23,12 +33,14 @@ const DisasterCard = ({ disasterData }) => {
     setSelectedMarker(selectedMarker); // Update the selected marker
   };
 
-  const formatDate = dateString => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
+  const formatDate = date => {
+    return date ? new Date(date).toLocaleDateString() : '';
   };
 
-  // Filter the disaster data based on search term and urgency filter
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split('T')[0];
+
+  // Filter the disaster data based on search term, urgency filter, and "Today" filter
   const filteredDisasters = disasterData.filter(disaster => {
     const matchesSearch =
       disaster.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -41,19 +53,32 @@ const DisasterCard = ({ disasterData }) => {
     const matchesUrgency =
       urgencyFilter === '' || disaster.urgency === urgencyFilter;
 
-    return matchesSearch && matchesUrgency;
+    const matchesToday =
+      !filterToday || // If "Today" filter is off, all disasters match
+      (new Date(disaster.effective).toISOString().split('T')[0] <= today &&
+        new Date(disaster.expires).toISOString().split('T')[0] >= today);
+
+    return matchesSearch && matchesUrgency && matchesToday;
   });
 
   return (
     <Box h="100vh" overflowY="hidden">
-      {/* Search Box */}
-      <Box p="4" bg="white">
+      {/* Search, Urgency, and Today Filter Box */}
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        p="4"
+        bg="white"
+      >
         <Input
           placeholder="Search for disasters..."
           mb={4}
           variant="filled"
           value={searchTerm} // Controlled input for search
           onChange={e => setSearchTerm(e.target.value)}
+          width="100%" // Make input take full width
+          maxWidth="400px" // Set max width for larger screens
         />
         {/* Urgency Filter Dropdown */}
         <Select
@@ -61,11 +86,24 @@ const DisasterCard = ({ disasterData }) => {
           value={urgencyFilter} // Controlled value for urgency filter
           onChange={e => setUrgencyFilter(e.target.value)} // Update urgency filter on selection
           mb={4}
+          width="100%" // Make select take full width
+          maxWidth="400px" // Set max width for larger screens
         >
           <option value="Immediate">Immediate</option>
           <option value="Expected">Expected</option>
         </Select>
-      </Box>
+        {/* Toggle switch for filtering disasters by today's date */}
+        <FormControl display="flex" alignItems="center" mb={4}>
+          <FormLabel htmlFor="today-switch" mb="0">
+            Show events for today
+          </FormLabel>
+          <Switch
+            id="today-switch"
+            isChecked={filterToday}
+            onChange={() => setFilterToday(!filterToday)} // Toggle today filter
+          />
+        </FormControl>
+      </Flex>
 
       {/* Flex Container for Card List */}
       <Flex
@@ -135,8 +173,9 @@ DisasterCard.propTypes = {
       urgency: PropTypes.string.isRequired,
       certainty: PropTypes.string.isRequired,
       effective: PropTypes.instanceOf(Date).isRequired, // Expect Date instance
-      expires: PropTypes.instanceOf(Date).isRequired,   // Expect Date instance
+      expires: PropTypes.instanceOf(Date).isRequired, // Expect Date instance
     })
   ).isRequired,
 };
+
 export default DisasterCard;
