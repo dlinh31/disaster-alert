@@ -12,17 +12,16 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    # Load environment variables from .env
     load_dotenv()
 
-    # Configure the app
     app.config.from_object('app.config.Config')
 
-    # Initialize SQLAlchemy with the app
     db.init_app(app)
 
-    # Register routes (blueprints)
-    from .routes import main
-    app.register_blueprint(main)
+    from .routes.user_routes import user_bp
+    from .routes.flood_alerts_routes import shelter_bp
+
+    app.register_blueprint(shelter_bp, url_prefix='/api/alerts')
+    app.register_blueprint(user_bp, url_prefix='/api/users')
 
     return app
