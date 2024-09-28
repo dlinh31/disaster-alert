@@ -10,7 +10,7 @@ function convertCoordinates(coordString) {
   try {
     const parsedCoords = JSON.parse(coordString); // Parse the string into an array
     return parsedCoords[0].map(point => ({
-      lat: point[1], // Convert [lng, lat] to {lat, lng}
+      lat: point[1],
       lng: point[0],
     }));
   } catch (error) {
@@ -68,12 +68,9 @@ const Home = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
-  useEffect(() => {
-    console.log('Shelters:', shelters);
-  }, [shelters]);
+
   if (loading) {
     return <p>Loading...</p>;
   }
