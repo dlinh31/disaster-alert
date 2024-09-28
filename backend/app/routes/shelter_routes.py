@@ -72,8 +72,9 @@ def get_shelters(user_id):
 
     return jsonify(shelter_list), 200
 
-
 # Delete shelter
+
+
 @shelter_bp.route('/<int:user_id>/delete-shelter/<int:shelter_id>', methods=['DELETE'])
 def delete_shelter(user_id, shelter_id):
     shelter = Shelter.query.filter_by(
@@ -83,3 +84,23 @@ def delete_shelter(user_id, shelter_id):
         db.session.commit()
         return jsonify({"message": "Shelter deleted successfully"}), 200
     return jsonify({"error": "Shelter not found"}), 404
+
+
+# Get all shelters
+@shelter_bp.route('/', methods=['GET'])
+def get_all_shelters():
+    shelters = Shelter.query.all()
+    shelter_list = []
+
+    for shelter in shelters:
+        shelter_list.append({
+            "id": shelter.id,
+            "name": shelter.name,
+            "address": shelter.address,
+            "latitude": shelter.latitude,
+            "longitude": shelter.longitude,
+            "capacity": shelter.capacity,
+            "current_occupancy": shelter.current_occupancy
+        })
+
+    return jsonify(shelter_list), 200

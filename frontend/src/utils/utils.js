@@ -8,7 +8,12 @@ export function calculateArea(coords) {
     area += x1 * y2 - x2 * y1;
   }
 
-//   return area / 2;
+  //   return area / 2;
   // replace with
   return Math.abs(area) / 2;
 }
+
+export const formatDate = dateString => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString();
+};

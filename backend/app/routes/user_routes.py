@@ -3,6 +3,10 @@ from ..models import User, SeekerProfile, ProviderProfile, db
 
 user_bp = Blueprint('user', __name__)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 @user_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
