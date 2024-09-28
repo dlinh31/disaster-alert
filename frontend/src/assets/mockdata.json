@@ -1,0 +1,73 @@
+{
+  "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.1872336fdfb9aa5369b2a91772162e065c4c8463.002.1",
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [-84.620000000000005, 30.390000000000001],
+        [-84.689999999999998, 30.280000000000001],
+        [-84.649999999999991, 30.25],
+        [-84.749999999999986, 30.23],
+        [-84.779999999999987, 30.300000000000001],
+        [-84.699999999999989, 30.390000000000001],
+        [-84.620000000000005, 30.390000000000001]
+      ]
+    ]
+  },
+  "properties": {
+    "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.1872336fdfb9aa5369b2a91772162e065c4c8463.002.1",
+    "@type": "wx:Alert",
+    "id": "urn:oid:2.49.0.1.840.0.1872336fdfb9aa5369b2a91772162e065c4c8463.002.1",
+    "areaDesc": "Leon, FL; Liberty, FL; Wakulla, FL",
+    "geocode": {
+      "SAME": ["012073", "012077", "012129"],
+      "UGC": ["FLC073", "FLC077", "FLC129"]
+    },
+    "affectedZones": [
+      "https://api.weather.gov/zones/county/FLC073",
+      "https://api.weather.gov/zones/county/FLC077",
+      "https://api.weather.gov/zones/county/FLC129"
+    ],
+    "references": [
+      {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.62d7b7daa81bd5aad792e7bb764a29f997f7bb1c.001.1",
+        "identifier": "urn:oid:2.49.0.1.840.0.62d7b7daa81bd5aad792e7bb764a29f997f7bb1c.001.1",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "sent": "2024-09-27T12:15:00-04:00"
+      }
+    ],
+    "sent": "2024-09-27T21:59:00-04:00",
+    "effective": "2024-09-27T21:59:00-04:00",
+    "onset": "2024-09-28T03:12:00-04:00",
+    "expires": "2024-09-28T10:45:00-04:00",
+    "ends": "2024-09-29T08:00:00-04:00",
+    "status": "Actual",
+    "messageType": "Update",
+    "category": "Met",
+    "severity": "Severe",
+    "certainty": "Observed",
+    "urgency": "Immediate",
+    "event": "Flood Warning",
+    "sender": "w-nws.webmaster@noaa.gov",
+    "senderName": "NWS Tallahassee FL",
+    "headline": "Flood Warning issued September 27 at 9:59PM EDT until September 29 at 8:00AM EDT by NWS Tallahassee FL",
+    "description": "...The Flood Warning continues for the following rivers in Georgia...\nFlorida...\n\nOchlockonee River near Thomasville (US 84) affecting Grady and\nThomas Counties.\n\nOchlockonee River near Bloxham (SR 20) affecting Leon, Liberty\nand Wakulla Counties.\n\n...The Flood Warning is extended for the following rivers in\nFlorida...\n\nOchlockonee River near Concord (CR 12) affecting Leon and Gadsden\nCounties.\n\nOchlockonee River near Havana (US 27) affecting Leon and Gadsden\nCounties.\n\n* WHAT...Minor flooding is forecast.\n\n* WHERE...Ochlockonee River near Bloxham (SR 20).\n\n* WHEN...From late tonight to Sunday morning.\n\n* IMPACTS...At 20.0 feet, Water begins to flood the backyards of\nhomes at the end of Crooked Road in Leon County.\n\n* ADDITIONAL DETAILS...\n- At 9:15 PM EDT Friday the stage was 19.3 feet.\n- Forecast...The river is expected to rise above flood stage\nlate tonight to a crest of 20.5 feet early tomorrow\nafternoon. It will then fall below flood stage early Sunday\nmorning.\n- Flood stage is 20.0 feet.\n- Flood History...This crest compares to a previous crest of\n20.6 feet on 09/18/2020.\n- http://www.weather.gov/safety/flood",
+    "instruction": "Turn around, don't drown when encountering flooded roads. Most flood\ndeaths occur in vehicles.\n\nMotorists should not attempt to drive around barricades or drive\ncars through flooded areas.\n\nAdditional information is available at www.weather.gov.\n\nThe next statement will be issued Saturday morning at 1045 AM EDT.",
+    "response": "Avoid",
+    "parameters": {
+      "AWIPSidentifier": ["FLSTAE"],
+      "WMOidentifier": ["WGUS82 KTAE 280159"],
+      "NWSheadline": [
+        "FLOOD WARNING NOW IN EFFECT FROM LATE TONIGHT TO SUNDAY MORNING"
+      ],
+      "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+      "EAS-ORG": ["WXR"],
+      "VTEC": ["/O.EXT.KTAE.FL.W.0091.240928T0712Z-240929T1200Z/"],
+      "eventEndingTime": ["2024-09-29T12:00:00+00:00"],
+      "expiredReferences": [
+        "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.a0917ff0da157cadf64c4f59afff242ee965610d.002.1,2024-09-26T21:47:00-04:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.f0d6800595eb82f929e1080d8e76ec99958b78a5.001.1,2024-09-26T12:00:00-04:00"
+      ]
+    }
+  }
+}
