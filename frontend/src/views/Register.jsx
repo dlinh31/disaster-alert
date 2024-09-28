@@ -10,7 +10,7 @@ function Register() {
   const [countryCode, setCountryCode] = useState('+1'); // State to store the country code
 
   // States for form fields
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -29,26 +29,22 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission
 
-    if (!username || !email || !phone || !password || !selectedRole) {
+    if (!name || !email || !phone || !password || !selectedRole) {
       alert('Please fill in all fields');
       return;
     }
     
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/users/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, email, password, phone, countryCode, role: selectedRole }),
+      const response = await axios.post('http://127.0.0.1:5000/api/users/register', {
+        name,
+        email,
+        password,
+        phone,
+        countryCode,
+        role: selectedRole,
       });
   
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      const result = await response.json();
-      console.log(result);
+      console.log(response.data);
       alert('Register successfully!\nClick OK to dismiss this alert.');
       navigate('/login');
     } catch (error) {
@@ -99,8 +95,8 @@ function Register() {
                   autoComplete="off"
                   name="name"
                   variant="outline"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)} // Capture username input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)} // Capture name input
                 />
               </FormControl>
 
