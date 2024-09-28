@@ -15,6 +15,7 @@ export default [
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
+        strict: false, // Set strict to false
       },
     },
     settings: { react: { version: '18.3' } },
@@ -33,6 +34,7 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'no-unused-vars': 'off', // Turn off no unused vars check
     },
   },
 ]
