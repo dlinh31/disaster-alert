@@ -3,7 +3,6 @@ from ..models import User, SeekerProfile, ProviderProfile, db
 
 user_bp = Blueprint('user', __name__)
 
-
 @user_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -13,6 +12,9 @@ def register():
     password = data.get('password')
     phone_number = data.get('phone_number')
     role = data.get('role')  # 'seeker' or 'provider'
+
+    if role not in ['provider', 'seeker']:
+        return jsonify({"error": "Invalid role"})
 
     if User.query.filter_by(email=email).first():
         return jsonify({"error": "Email already exists"}), 400
@@ -38,4 +40,4 @@ def register():
 
     db.session.commit()
 
-    return jsonify({"message": f"{role.capitalize()} registered successfully"}), 201
+    return jsonify({"message": f"{role.capitalize()}, with id {new_user.id} registered successfully"}), 201
