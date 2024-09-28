@@ -7,6 +7,7 @@ from datetime import datetime
 
 
 flood_alert_bp = Blueprint('flood_alert', __name__)
+RESULT_LIMIT = 200
 
 
 @flood_alert_bp.route('/api/get-api-key', methods=['GET'])
@@ -19,7 +20,6 @@ def get_api_key():
 
 @flood_alert_bp.route('/fetch-flood-warnings', methods=['GET'])
 def fetch_flood_warnings():
-
     try:
         # Test onlyyyy
         Flood_Alert.query.delete()
@@ -31,7 +31,7 @@ def fetch_flood_warnings():
 
         data = response.json()
 
-        features = data['features'][:50]
+        features = data['features'][:RESULT_LIMIT]
         flood_alerts = []
 
         for i, feature in enumerate(features):

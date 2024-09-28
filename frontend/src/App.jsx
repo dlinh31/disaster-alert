@@ -7,13 +7,16 @@ import {
 } from 'react-router-dom';
 import Home from './views/Home';
 import { ChakraProvider } from '@chakra-ui/react';
+import Login from './views/Login';
+import Register from './views/Register';
 
 // Correct the route structure
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<Home />} />
-      {/* <Route path="/about" element={<AboutPage />} /> */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
     </>
   )
 );
