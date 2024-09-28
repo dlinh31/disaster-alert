@@ -1,50 +1,79 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Input, Flex, Text } from '@chakra-ui/react';
 
-const disasterData = [
-    { title: 'Disaster Title 1', description: 'A brief description of the disaster.' },
-    { title: 'Disaster Title 2', description: 'A brief description of the disaster.' },
-    { title: 'Disaster Title 3', description: 'A brief description of the disaster.' },
-    { title: 'Disaster Title 4', description: 'A brief description of the disaster.' },
-    { title: 'Disaster Title 5', description: 'A brief description of the disaster.' },
-    { title: 'Disaster Title 6', description: 'A brief description of the disaster.' },
-    // Add more disasters as needed
-];
+const DisasterCard = ({ disasterData }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const filteredDisasters = disasterData.filter((disaster) =>
+        disaster.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        disaster.eventType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        disaster.area.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        disaster.severity.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        disaster.urgency.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        disaster.certainty.toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
-const DisasterCard = () => {
-    return (
-        <Box h="100%" paddingTop="5%"> {/* Parent box occupying full height and padding left-right */}
-            {/* Search Box */}
-            <Box p="0 5%">
-            <Input 
-                placeholder="Search for disasters..." 
-                mb={4} 
-                variant="filled" 
-            />
-            </Box>
-            {/* Flex Container for Card List */}
-            <Flex 
-                flexDirection="column" 
-                h="90%" // Remaining height after search box
-                overflowY="auto" // Allow scrolling for the card list
-                justifyContent="flex-start" // Align cards at the start
-            >
-               {disasterData.map((disaster, index) => (
-                    <Box 
-                        key={index} // Use index as key (or use a unique identifier if available)
-                        bg="white" 
-                        p={4} 
-                        flex="0 0 20%" // Fixed height for cards
-                        borderTop="0.25px groove grey"
-                        borderBottom="0.25px groove grey"
-                    >
-                        <Text fontWeight="bold">{disaster.title}</Text>
-                        <Text>{disaster.description}</Text>
-                    </Box>
-                ))}
-            </Flex>
-        </Box>
-    );
+      const formatDate = (dateString) => {
+        const date = new Date(dateString); // Convert string to Date object
+        return date.toLocaleDateString(); // Format date as a locale string
+    };
+
+  return (
+    <Box h="100vh" overflowY="hidden">
+      {/* Search Box */}
+      <Box p="4" bg="white" border="1px solid black">
+        <Input placeholder="Search for disasters..."
+          mb={4}
+          variant="filled"
+          value={searchTerm} // Controlled input
+          onChange={(e) => setSearchTerm(e.target.value)}/>
+      </Box>
+
+      {/* Flex Container for Card List */}
+      <Flex
+        flexDirection="column"
+        height="calc(100vh - 64px)" // Adjust height based on the search box height
+        overflowY="auto" // Allow scrolling for the entire Flex container
+        p="4"
+      >
+        {filteredDisasters.map((disaster, index) => (
+          <Box
+            key={index}
+            bg="white"
+            p={4}
+            borderRadius="md"
+            shadow="md"
+            mb={4} // Margin between cards
+            border="1px solid #ccc"
+          >
+            <Text fontWeight="bold" fontSize="lg" mb={2}>
+              {disaster.title}
+            </Text>
+            <Text>
+              <strong>Event Type:</strong> {disaster.eventType}
+            </Text>
+            <Text>
+              <strong>Area:</strong> {disaster.area}
+            </Text>
+            <Text>
+              <strong>Severity:</strong> {disaster.severity}
+            </Text>
+            <Text>
+              <strong>Urgency:</strong> {disaster.urgency}
+            </Text>
+            <Text>
+              <strong>Certainty:</strong> {disaster.certainty}
+            </Text>
+            <Text>
+              <strong>Effective:</strong> {formatDate(disaster.effective)}
+            </Text>
+            <Text>
+              <strong>Expires:</strong> {formatDate(disaster.expires)}
+            </Text>
+          </Box>
+        ))}
+      </Flex>
+    </Box>
+  );
 };
 
 export default DisasterCard;
