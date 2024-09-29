@@ -50,9 +50,10 @@ const SheltersCard = () => {
 
       {/* Flex Container for Card List */}
       <Flex
-      flexDirection="column"
-      height="calc(100vh - 20vh)"
-      overflowY="auto"
+        flexDirection="column"
+        h="90%" // Remaining height after search box
+        overflowY="auto" // Allow scrolling for the card list
+        justifyContent="flex-start" // Align cards at the start
       >
         {shelters.map((shelter) => (
           <Box
@@ -61,23 +62,25 @@ const SheltersCard = () => {
             p={4}
             borderTop="0.25px groove grey"
             borderBottom="0.25px groove grey"
+            position="relative" // To position the delete button in the bottom-right
           >
             <Text fontWeight="bold">{shelter.title}</Text>
             <Text>{shelter.description}</Text>
-            
-            {/* Flex container for buttons */}
-            <Flex mt={2} justifyContent="space-between">
-              <Button size="sm" onClick={() => handleViewDetails(shelter)}>
-                View Details
-              </Button>
-              <Button
-                size="sm"
-                colorScheme="red"
-                onClick={() => handleDeleteShelter(shelter.id)}
-              >
-                Delete
-              </Button>
-            </Flex>
+            <Button mt={2} size="sm" onClick={() => handleViewDetails(shelter)}>
+              View Details
+            </Button>
+
+            {/* Delete Button in the bottom-right corner */}
+            <Button
+              size="sm"
+              colorScheme="red"
+              position="absolute"
+              bottom="10px"
+              right="10px"
+              onClick={() => handleDeleteShelter(shelter.id)}
+            >
+              Delete
+            </Button>
           </Box>
         ))}
       </Flex>
