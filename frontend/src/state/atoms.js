@@ -18,3 +18,5 @@ export const userAtom = atomWithStorage('user', {
   phone: '91379912318',
   role: 'provider',
 });
+
+

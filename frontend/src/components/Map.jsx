@@ -209,6 +209,8 @@ function Map({ disasterData, shelters }) {
   }
 
   function clearRoute() {
+    setIsFindRoute(false)
+
     setDirectionsResponse(null);
     setDistance('');
     setDuration('');

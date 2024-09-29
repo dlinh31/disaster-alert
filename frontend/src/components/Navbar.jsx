@@ -1,5 +1,5 @@
 // src/components/Header.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Flex,
@@ -21,10 +21,12 @@ import {
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
+import { useAtom } from 'jotai';
+import { userAtom } from '../state/atoms'; // Import the userAtom from your atom file
 const Links = ['Home', 'Alerts', 'Shelters', 'Contact'];
-
 const NavLink = ({ children, to }) => {
   const navigate = useNavigate();
+
   return (
     <Button
       as="a"
@@ -41,7 +43,14 @@ const NavLink = ({ children, to }) => {
 const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
-  const isAuthenticated = false; // Replace with your auth logic
+  const [user, setUser] = useAtom(userAtom); // Get the user data from the atom
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (user.id !== -1) {
+      setIsAuthenticated(true);
+    }
+  }, [user]);
 
   return (
     <>
@@ -125,14 +134,23 @@ const Header = () => {
                   />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem onClick={() => navigate('/profile')}>
-                    Profile
-                  </MenuItem>
+                  <MenuItem onClick={() => navigate('/user')}>Profile</MenuItem>
                   <MenuItem onClick={() => navigate('/settings')}>
                     Settings
                   </MenuItem>
                   <MenuDivider />
-                  <MenuItem onClick={() => navigate('/logout')}>
+                  <MenuItem
+                    onClick={() => {
+                      setUser({
+                        id: -1,
+                        name: 'Ben Dover',
+                        email: 'bendover@gmail.com',
+                        phone: '91379912318',
+                        role: 'provider',
+                      });
+                      navigate('/home');
+                    }}
+                  >
                     Logout
                   </MenuItem>
                 </MenuList>

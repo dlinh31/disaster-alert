@@ -13,8 +13,12 @@ import {
 } from '@chakra-ui/react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
+import { useAtom } from 'jotai';
+import { userAtom } from '../state/atoms'; // Import the userAtom from your atom file
 
 function Login() {
+  const [user, setUser] = useAtom(userAtom); // Get the user data from the atom
+
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState(''); // State to store email input
   const [password, setPassword] = useState(''); // State to store password input
@@ -53,9 +57,7 @@ function Login() {
           password,
         }
       );
-
-      // Assuming the response contains a success message and user data
-      console.log(response.data);
+      setUser(response.data);
 
       // Show success notification
       toast({
