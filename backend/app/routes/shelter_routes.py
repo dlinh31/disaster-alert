@@ -72,9 +72,8 @@ def get_shelters(user_id):
 
     return jsonify(shelter_list), 200
 
+
 # Delete shelter
-
-
 @shelter_bp.route('/<int:user_id>/delete-shelter/<int:shelter_id>', methods=['DELETE'])
 def delete_shelter(user_id, shelter_id):
     shelter = Shelter.query.filter_by(
