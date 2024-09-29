@@ -66,7 +66,7 @@ def register():
                 "id": new_user.id,
                 "name": new_user.name,
                 "email": new_user.email,
-                "phone_number": new_user.phone_number
+                "phone_number": new_user.phone_number,
                 "role": new_user.role
             },
             "access_token": access_token
@@ -98,6 +98,7 @@ def login():
             "id": user.id,
             "name": user.name,
             "email": user.email,
+            "phone_number": user.phone_number,
             "role": user.role
         }
     }), 200

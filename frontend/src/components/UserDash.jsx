@@ -26,14 +26,14 @@ import { userAtom } from '../state/atoms'; // Import the userAtom from your atom
 import axios from 'axios';
 import { Autocomplete, useJsApiLoader } from '@react-google-maps/api';
 
-const libraries = ['places']; // Specify the libraries for Google Maps API
+const libraries = ['places', 'visualization']; // Specify the libraries for Google Maps API
 
 const UserDash = () => {
   const [timezone, setTimezone] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure(); // Controls the modal
 
   // Fetch user data from atomWithStorage (localStorage)
-  const [user] = useAtom(userAtom); // Get the user data from the atom
+  const [user] = useAtom(userAtom); // Get user data from atomWithStorage (localStorage)
 
   // Form state for the shelter inputs
   const [shelterName, setShelterName] = useState('');
@@ -46,9 +46,6 @@ const UserDash = () => {
 
   /** @type React.MutableRefObject<HTMLInputElement> */
   const autocompleteRef = useRef(null); // Ref for Autocomplete instance
-
-  /** @type React.MutableRefObject<HTMLInputElement> */
-  const originRef = useRef();
 
   // Load Google Maps API with the 'places' library
   const { isLoaded } = useJsApiLoader({
@@ -97,15 +94,15 @@ const UserDash = () => {
             name: shelterName,
             address: shelterAddress,
             capacity: shelterCapacity,
-            occupancy: shelterOccupancy,
+            current_occupancy: shelterOccupancy,
             latitude: shelterCoordinates ? shelterCoordinates.lat : null, // Send latitude
             longitude: shelterCoordinates ? shelterCoordinates.lng : null, // Send longitude
           };
           // Make POST request to add the shelter using the user’s ID
           console.log('Adding shelter:', newShelter);
           const response = await axios.post(
-            // `${import.meta.env.VITE_BASE_URL}/api/shelters/${user.id}/add-shelter`,
-            `${import.meta.env.VITE_BASE_URL}/api/shelters/1/add-shelter`,
+            `${import.meta.env.VITE_BASE_URL}/api/shelters/${user.id}/add-shelter`,
+            // `${import.meta.env.VITE_BASE_URL}/api/shelters/1/add-shelter`,
             newShelter
           );
 
@@ -199,7 +196,7 @@ const UserDash = () => {
             </Heading>
             <Text>
               <strong>Phone Number:</strong>
-              {user.phone} {/* Display phone from userAtom */}
+              {user.phone_number} {/* Display phone from userAtom */}
             </Text>
             <Text>
               <strong>Timezone: </strong>

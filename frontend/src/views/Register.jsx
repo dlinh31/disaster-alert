@@ -72,7 +72,6 @@ function Register() {
         }
       );
 
-      console.log(response.data);
 
       // Show success toast
       toast({
@@ -85,17 +84,12 @@ function Register() {
       });
 
       // Set the user data to userAtom after successful registration
-      setUser({
-        name: name,
-        email: email,
-        phone: phone,
-        role: selectedRole,
-      });
+      setUser(response.data.user);
 
       // Navigate to login or another page after setting the user data
       navigate('/');
     } catch (error) {
-      console.log('Error:', error);
+      console.error('Error:', error);
 
       // Show error toast in case of failure
       toast({

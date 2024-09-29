@@ -12,7 +12,7 @@ export const radiusAtom = atom(5000);
 export const isFindRouteAtom = atom(false);
 
 export const userAtom = atomWithStorage('user', {
-  id: 1,
+  id: -1,
   name: 'Ben Dover',
   email: 'bendover@gmail.com',
   phone: '91379912318',

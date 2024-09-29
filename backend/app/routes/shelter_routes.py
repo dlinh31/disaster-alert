@@ -28,6 +28,27 @@ def add_shelter(user_id):
 
     return jsonify({"message": "Shelter added successfully", "shelter_id": new_shelter.id}), 201
 
+@shelter_bp.route('/<int:user_id>/get-shelter', methods=['GET'])
+def get_shelter_from_user(user_id):
+    provider = ProviderProfile.query.filter_by(user_id=user_id).first()
+    if not provider:
+        return jsonify({"error": "Provider not found"}), 404
+    shelters = Shelter.query.filter_by(provider_profile_id=provider.id)
+    print(shelters)
+    if not shelters:
+        return jsonify([]), 200
+    res = []
+    for shelter in shelters:
+        res.append({
+            "id": shelter.id,
+            "name": shelter.name,
+            "address": shelter.address,
+            "latitude": shelter.latitude,
+            "longitude": shelter.longitude,
+            "capacity": shelter.capacity,
+            "current_occupancy": shelter.current_occupancy
+        })
+    return jsonify(res), 200
 
 # Update existing shelter
 @shelter_bp.route('/<int:user_id>/update-shelter/<int:shelter_id>', methods=['PUT'])
