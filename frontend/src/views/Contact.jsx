@@ -15,7 +15,7 @@ function Contact() {
             {/* Navbar with transparent background */}
             <Navbar />
 
-            <Flex direction="column" alignItems="center" height="35vh" justifyContent="center" bg="lightblue" paddingTop="10vh">
+            <Flex direction="column" alignItems="center" height="35vh" justifyContent="center" bg="lightblue">
                 <Heading as="h1" size="2xl" color="black" textAlign="center">
                     Contact Us
                 </Heading>
@@ -72,7 +72,6 @@ function Contact() {
                         colorScheme="blue"
                         variant="outline"
                         marginTop="4"
-                        onClick={() => navigate('/sales')} // Change the route as needed
                     >
                         Contact
                     </Button>

@@ -58,9 +58,7 @@ const Header = () => {
         bg={useColorModeValue('white', 'gray.800')}
         px={4}
         boxShadow="md"
-        position="fixed"
-        width="100%"
-        zIndex="1000"
+        width="100vw"
       >
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <IconButton
@@ -84,7 +82,7 @@ const Header = () => {
                 mr={2}
               />
               <Text fontSize="xl" fontWeight="bold" color="blue.600">
-                Disaster Alert
+                Hurricanify
               </Text>
             </Box>
             <HStack
