@@ -370,6 +370,15 @@ function Map({ disasterData, shelters }) {
                   <strong>Current Occupancy:</strong>{' '}
                   {selectedShelter.currentOccupancy}
                 </Text>
+                <Button
+                  mt={2}
+                  size="sm"
+                  fontSize="sm"
+                  colorScheme="blue"
+                  variant="outline"
+                >
+                  Contact shelter
+                </Button>
               </div>
             </InfoWindow>
           )}

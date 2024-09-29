@@ -31,8 +31,6 @@ function FirstPage() {
         }}
       ></div>
 
-      {/* Navbar with transparent background */}
-      <Header plainLinks={true} /> {/* Pass the prop to make links plain text */}
 
       {/* Content on top of the darkened background */}
       <div
@@ -55,7 +53,7 @@ function FirstPage() {
           colorScheme="whiteAlpha" 
           onClick={() => navigate('/home')} // Add navigation logic as needed
         >
-          Homepage
+          Discover
         </Button>
       </div>
     </div>

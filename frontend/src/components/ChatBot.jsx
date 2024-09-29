@@ -95,7 +95,7 @@ const Chatbot = ({ isEnlarged, toggleEnlarge }) => {
         p={2}
         borderBottom="1px solid #E2E8F0"
       >
-        <Text fontWeight="bold">Chatbot</Text>
+        <Text fontWeight="bold">AI Weatherman</Text>
         <IconButton
           aria-label={isEnlarged ? 'Minimize Chatbot' : 'Enlarge Chatbot'}
           icon={isEnlarged ? <ArrowDownIcon /> : <ArrowUpIcon />}
