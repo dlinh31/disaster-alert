@@ -88,7 +88,7 @@ def get_shelters(user_id):
             "latitude": shelter.latitude,
             "longitude": shelter.longitude,
             "capacity": shelter.capacity,
-            "current_occupancy": shelter.current_occupancy
+            "current_occupancy": shelter.current_occupancyq
         })
 
     return jsonify(shelter_list), 200
