@@ -1,20 +1,16 @@
 from flask import Blueprint, jsonify, request
 import requests
-from .config import Config
-from . import db
+from ..config import Config
+from ..models import db
 from app.models import User, Flood_Alert
 from datetime import datetime
 
 
-main = Blueprint('main', __name__)
+flood_alert_bp = Blueprint('flood_alert', __name__)
+RESULT_LIMIT = 200
 
 
-@main.route('/')
-def index():
-    return "Backend is running"
-
-
-@main.route('/api/get-api-key', methods=['GET'])
+@flood_alert_bp.route('/api/get-api-key', methods=['GET'])
 def get_api_key():
     if Config.GOOGLE_API_KEY:  # Check if the key is available
         return jsonify({"googleMapsApiKey": Config.GOOGLE_API_KEY})
@@ -22,56 +18,23 @@ def get_api_key():
         return jsonify({"error": "API key not found"}), 500
 
 
-@main.route('/api/get-users', methods=['GET'])
-def get_users():
+@flood_alert_bp.route('/fetch-flood-warnings', methods=['GET'])
+def fetch_flood_warnings():
     try:
-        # Fetch all users from the database
-        users = User.query.all()
-        users_list = [{"id": user.id, "name": user.name,
-                       "email": user.email} for user in users]
-        return jsonify(users_list), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@main.route('/api/add-user', methods=['POST'])
-def add_user():
-    try:
-        data = request.json
-
-        name = data.get('name')
-        email = data.get('email')
-
-        if not name or not email:
-            return jsonify({"error": "Name and email are required"}), 400
-
-        new_user = User(name=name, email=email)
-
-        db.session.add(new_user)
+        # Test onlyyyy
+        Flood_Alert.query.delete()
         db.session.commit()
 
-        return jsonify({"message": "User added successfully", "user": {"name": name, "email": email}}), 201
-
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
-
-
-@main.route('/fetch-flood-warnings', methods=['GET'])
-def fetch_flood_warnings():
-
-    try:
         response = requests.get(
             'https://api.weather.gov/alerts/active?event=Flood%20Warning')
         response.raise_for_status()
 
         data = response.json()
 
-        features = data['features'][:50]
+        features = data['features'][:RESULT_LIMIT]
         flood_alerts = []
 
-        for feature in features:
+        for i, feature in enumerate(features):
             properties = feature['properties']
             geometry = feature['geometry']
 
@@ -126,13 +89,14 @@ def fetch_flood_warnings():
         return jsonify({"error": str(e)}), 500
 
 
-@main.route('/fetch-flood-alerts-from-db', methods=['GET'])
+@flood_alert_bp.route('/fetch-flood-alerts-from-db', methods=['GET'])
 def fetch_food_alerts_from_db():
     try:
         flood_alerts = Flood_Alert.query.all()
         alerts_list = []
         for alert in flood_alerts:
             alerts_list.append({
+                "id": alert.id,
                 "event": alert.event,
                 "area_desc": alert.area_desc,
                 "severity": alert.severity,
@@ -140,7 +104,7 @@ def fetch_food_alerts_from_db():
                 "urgency": alert.urgency,
                 "headline": alert.headline,
                 "description": alert.description,
-                "coordinates": alert.coordinates,  # Assuming it's stored as a string
+                "coordinates": alert.coordinates,
                 "effective": alert.effective.strftime('%Y-%m-%dT%H:%M:%S%z'),
                 "expires": alert.expires.strftime('%Y-%m-%dT%H:%M:%S%z')
             })

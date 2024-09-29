@@ -9,14 +9,18 @@ import Home from './views/Home';
 import { ChakraProvider } from '@chakra-ui/react';
 import Login from './views/Login';
 import Register from './views/Register';
+import UserProfile from './views/UserProfile';
+import FirstPage from './views/FirstPage';
 
 // Correct the route structure
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Home />} />
+      <Route path="/home" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/user" element={<UserProfile />} />
+      <Route path="/" element={<FirstPage />} />
     </>
   )
 );
