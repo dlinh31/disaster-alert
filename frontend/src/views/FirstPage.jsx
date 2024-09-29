@@ -54,9 +54,9 @@ function FirstPage() {
           gap: '5px',
         }}
       >
-        <h1 style={{ fontWeight: '500' }}>Hurricanify</h1>
+        <h1 style={{ fontWeight: '500' }}>SheltrNow</h1>
         <h2 style={{ fontSize: '1.5rem', fontWeight: '300' }}>
-          We are Hurricanify, your Eye on the Hurricane!
+        Your Lifeline in Times of Crisis
         </h2>
         <Button
           colorScheme="whiteAlpha"
