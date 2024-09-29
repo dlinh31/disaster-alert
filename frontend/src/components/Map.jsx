@@ -19,6 +19,7 @@ import {
   DirectionsRenderer,
 } from '@react-google-maps/api';
 import { FaLocationArrow, FaTimes } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 import { findNearestShelter } from '../utils/utils';
 import { useEffect, useState, useRef } from 'react';
@@ -209,7 +210,7 @@ function Map({ disasterData, shelters }) {
   }
 
   function clearRoute() {
-    setIsFindRoute(false)
+    setIsFindRoute(false);
 
     setDirectionsResponse(null);
     setDistance('');
@@ -231,6 +232,12 @@ function Map({ disasterData, shelters }) {
     setSelectedShelter(nearestShelter);
     // Calculate the route to the nearest shelter
     calculateRoute();
+  };
+
+  const navigate = useNavigate();
+
+  const handleContactShelter = shelter => {
+    navigate(`/contact/${shelter.id}`); // Navigate to /contact/{shelterId}
   };
 
   if (!isLoaded) {
@@ -379,6 +386,9 @@ function Map({ disasterData, shelters }) {
                   fontSize="sm"
                   colorScheme="blue"
                   variant="outline"
+                  onClick={() => {
+                    handleContactShelter(selectedShelter);
+                  }}
                 >
                   Contact shelter
                 </Button>

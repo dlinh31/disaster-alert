@@ -57,7 +57,7 @@ function Login() {
           password,
         }
       );
-      setUser(response.data);
+      setUser(response.data.user);
 
       // Show success notification
       toast({
