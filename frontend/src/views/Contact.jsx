@@ -15,7 +15,7 @@ function Contact() {
             {/* Navbar with transparent background */}
             <Navbar />
 
-            <Flex direction="column" alignItems="center" height="35vh" justifyContent="center" bg="lightblue">
+            <Flex direction="column" alignItems="center" height="35vh" justifyContent="center" bg="lightblue" paddingTop="10vh">
                 <Heading as="h1" size="2xl" color="black" textAlign="center">
                     Contact Us
                 </Heading>

@@ -96,7 +96,7 @@ const Home = () => {
       <GridItem area={'nav'}>
         <DisasterCard disasterData={disasterData} />
       </GridItem>
-      <GridItem area={'main'} position="relative">
+      <GridItem area={'main'}  mt={16} position="relative">
         <Map disasterData={disasterData} shelters={shelters} />
 
         {/* Chatbot floating on top of the map */}
