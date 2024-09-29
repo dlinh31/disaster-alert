@@ -9,21 +9,28 @@ import {
   Switch,
   FormControl,
   FormLabel,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  Button, // Import Button component
 } from '@chakra-ui/react'; // Import Chakra components
 import { useAtom } from 'jotai';
-import { selectedMarkerAtom } from '../state/atoms';
+import {
+  selectedMarkerAtom,
+  radiusAtom,
+  isFindRouteAtom, // Import isFindRouteAtom
+} from '../state/atoms';
 
 const DisasterCard = ({ disasterData }) => {
   const [selectedMarker, setSelectedMarker] = useAtom(selectedMarkerAtom); // Get selectedMarker from Jotai
-
-  // State for search term, urgency filter, and today filter
+  const [radius, setRadius] = useAtom(radiusAtom); // Get and set radius from Jotai
+  const [isFindRoute, setIsFindRoute] = useAtom(isFindRouteAtom); // Get and set isFindRoute from Jotai
   const [searchTerm, setSearchTerm] = useState('');
   const [urgencyFilter, setUrgencyFilter] = useState('');
-  const [filterToday, setFilterToday] = useState(false); // State for the "Today" filter
+  const [filterToday, setFilterToday] = useState(false);
 
-  // Handle card click and set the selected marker
   const handleCardClick = disaster => {
-    console.log(disaster);
     const selectedMarker = {
       id: disaster.id,
       position: disaster.coordinates[0], // Assume first coordinate represents the marker position
@@ -37,7 +44,6 @@ const DisasterCard = ({ disasterData }) => {
       effective: disaster.effective,
       expires: disaster.expires,
     };
-
     setSelectedMarker(selectedMarker); // Update the selected marker
   };
 
@@ -45,10 +51,8 @@ const DisasterCard = ({ disasterData }) => {
     return date ? new Date(date).toLocaleDateString() : '';
   };
 
-  // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split('T')[0];
 
-  // Filter the disaster data based on search term, urgency filter, and "Today" filter
   const filteredDisasters = disasterData.filter(disaster => {
     const matchesSearch =
       disaster.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -62,7 +66,7 @@ const DisasterCard = ({ disasterData }) => {
       urgencyFilter === '' || disaster.urgency === urgencyFilter;
 
     const matchesToday =
-      !filterToday || // If "Today" filter is off, all disasters match
+      !filterToday ||
       (new Date(disaster.effective).toISOString().split('T')[0] <= today &&
         new Date(disaster.expires).toISOString().split('T')[0] >= today);
 
@@ -71,7 +75,6 @@ const DisasterCard = ({ disasterData }) => {
 
   return (
     <Box h="100vh" overflowY="hidden">
-      {/* Search, Urgency, and Today Filter Box */}
       <Flex
         justifyContent="center"
         alignItems="center"
@@ -83,24 +86,22 @@ const DisasterCard = ({ disasterData }) => {
           placeholder="Search for disasters..."
           mb={4}
           variant="filled"
-          value={searchTerm} // Controlled input for search
+          value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
-          width="100%" // Make input take full width
-          maxWidth="400px" // Set max width for larger screens
+          width="100%"
+          maxWidth="400px"
         />
-        {/* Urgency Filter Dropdown */}
         <Select
-          placeholder="Filter by urgency" // Default placeholder
-          value={urgencyFilter} // Controlled value for urgency filter
-          onChange={e => setUrgencyFilter(e.target.value)} // Update urgency filter on selection
+          placeholder="Filter by urgency"
+          value={urgencyFilter}
+          onChange={e => setUrgencyFilter(e.target.value)}
           mb={4}
-          width="100%" // Make select take full width
-          maxWidth="400px" // Set max width for larger screens
+          width="100%"
+          maxWidth="400px"
         >
           <option value="Immediate">Immediate</option>
           <option value="Expected">Expected</option>
         </Select>
-        {/* Toggle switch for filtering disasters by today's date */}
         <FormControl display="flex" alignItems="center" mb={4}>
           <FormLabel htmlFor="today-switch" mb="0">
             Show events for today
@@ -108,34 +109,64 @@ const DisasterCard = ({ disasterData }) => {
           <Switch
             id="today-switch"
             isChecked={filterToday}
-            onChange={() => setFilterToday(!filterToday)} // Toggle today filter
+            onChange={() => setFilterToday(!filterToday)}
           />
         </FormControl>
+
+        {/* Radius slider */}
+        <FormControl display="flex" alignItems="center" mb={4}>
+          <FormLabel htmlFor="radius-slider" mb="0">
+            Radius (in km)
+          </FormLabel>
+          <Slider
+            id="radius-slider"
+            value={radius / 1000} // Convert meters to km
+            min={1}
+            max={50}
+            step={1}
+            onChange={value => setRadius(value * 1000)} // Convert km back to meters
+          >
+            <SliderTrack>
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb />
+          </Slider>
+          <Text ml={4}>{radius / 1000} km</Text>{' '}
+          {/* Display the radius in km */}
+        </FormControl>
+
+        {/* Add the button to toggle finding route */}
+        <Button
+          colorScheme={isFindRoute ? 'teal' : 'gray'}
+          onClick={() => setIsFindRoute(!isFindRoute)}
+          mb={4}
+        >
+          {isFindRoute ? 'Disable Route Finding' : 'Enable Route Finding'}
+        </Button>
       </Flex>
 
-      {/* Flex Container for Card List */}
       <Flex
         flexDirection="column"
-        height="calc(100vh - 64px)" // Adjust height based on the search box height
-        overflowY="auto" // Allow scrolling for the entire Flex container
+        height="calc(100vh - 64px)"
+        overflowY="auto"
         p="4"
       >
         {filteredDisasters.map((disaster, index) => {
-          const isSelected = selectedMarker?.id === disaster.id; // Check if this card is selected
+          const isSelected = selectedMarker?.id === disaster.id;
           return (
             <Box
               key={index}
-              bg={isSelected ? 'teal.100' : 'white'} // Change background if selected
+              bg={isSelected ? 'teal.100' : 'white'}
               p={4}
               borderRadius="md"
               shadow="md"
               mb={4}
               border="1px solid #ccc"
-              onClick={() => handleCardClick(disaster)} // Add onClick to handle marker selection
-              cursor="pointer" // Change the cursor to indicate clickability
+              onClick={() => handleCardClick(disaster)}
+              cursor="pointer"
               _hover={{
-                bg: 'teal.50', // Hover effect to change background
-                border: '1px solid teal', // Change border color on hover
+                bg: 'teal.50',
+                border: '1px solid teal',
               }}
             >
               <Text fontWeight="bold" fontSize="lg" mb={2}>
@@ -180,8 +211,8 @@ DisasterCard.propTypes = {
       severity: PropTypes.string.isRequired,
       urgency: PropTypes.string.isRequired,
       certainty: PropTypes.string.isRequired,
-      effective: PropTypes.instanceOf(Date).isRequired, // Expect Date instance
-      expires: PropTypes.instanceOf(Date).isRequired, // Expect Date instance
+      effective: PropTypes.instanceOf(Date).isRequired,
+      expires: PropTypes.instanceOf(Date).isRequired,
     })
   ).isRequired,
 };
