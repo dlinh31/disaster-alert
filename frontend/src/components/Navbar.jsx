@@ -21,6 +21,7 @@ import {
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
+import pfp from '../assets/pfp.png';
 import { useAtom } from 'jotai';
 import { userAtom } from '../state/atoms'; // Import the userAtom from your atom file
 const Links = ['Home', 'Alerts', 'Shelters', 'Contact'];
@@ -128,7 +129,7 @@ const Header = () => {
                 >
                   <Avatar
                     size={'sm'}
-                    src={'https://bit.ly/sage-adebayo'} // Replace with user's avatar
+                    src={pfp}
                   />
                 </MenuButton>
                 <MenuList>

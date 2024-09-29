@@ -22,6 +22,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
+import pfp from '../assets/pfp.png'
 import { userAtom } from '../state/atoms'; // Import the userAtom from your atom file
 import axios from 'axios';
 import { Autocomplete, useJsApiLoader } from '@react-google-maps/api';
@@ -153,7 +154,7 @@ const UserDash = () => {
     <Box p={6}>
       <Box mt={4} marginBottom="5vh">
         <Image
-          src="https://via.placeholder.com/150"
+          src={pfp}
           alt="Profile"
           boxSize="200px"
           borderRadius="full"
