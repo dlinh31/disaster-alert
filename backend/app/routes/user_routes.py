@@ -42,6 +42,36 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
+<<<<<<< HEAD
+    return jsonify({"message": f"{role.capitalize()}, with id {new_user.id} registered successfully"}), 201
+
+@user_bp.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    # Check if the user exists
+    user = User.query.filter_by(email=email).first()
+    
+    if user is None:
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    # Check if the provided password matches
+    if not user.check_password(password):
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    # If login is successful, you can return a success message and user details
+    return jsonify({
+        "message": "Login successful",
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "role": user.role,
+        }
+    }), 201
+=======
         if role == 'seeker':
             seeker_profile = SeekerProfile(
                 user_id=new_user.id,
@@ -118,3 +148,4 @@ def get_seeker_profile(user_id):
 def logout():
     return jsonify({"message": "Logged out successfully"}), 200
     
+>>>>>>> 1a0ee7c4b0ea2420cc5e463e8c434531cf49cc85
