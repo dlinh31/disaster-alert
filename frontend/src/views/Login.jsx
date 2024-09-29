@@ -1,14 +1,42 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Box, Button, FormControl, FormLabel, Input, Heading, Text, Flex } from '@chakra-ui/react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import axios from 'axios';
 
 function Login() {
-    const [showPassword, setShowPassword] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // Hook for navigation
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    if (!email || !password) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/api/users/login', {
+        email,
+        password,
+      });
+
+      console.log(response.data);
+      alert('Login successfully!\nClick OK to dismiss this alert.');
+      navigate('/user'); // Redirect to your desired route after login
+    } catch (error) {
+      console.log('Error:', error);
+      alert('Login failed. Please check your email and password.');
+    }
+  };
+      
   return (
     <Box
       className="flex justify-center items-center bg-gray-800"
@@ -19,7 +47,7 @@ function Login() {
         <Heading as="h2" size="lg" mb={4} textAlign="center">
           Login
         </Heading>
-        <form>
+        <form onSubmit={handleSubmit}> {/* Added onSubmit handler */}
           <FormControl mb={4}>
             <FormLabel htmlFor="email">
               <strong>Email</strong>
@@ -30,6 +58,8 @@ function Login() {
               autoComplete="off"
               name="email"
               variant="outline"
+              value={email} // Controlled input
+              onChange={(e) => setEmail(e.target.value)} // Update state on change
             />
           </FormControl>
           <FormControl mb={4}>
@@ -44,6 +74,8 @@ function Login() {
                 variant="outline"
                 flex="1" // Allow the input to take available space
                 mr={2} // Add margin to the right
+                value={password} // Controlled input
+                onChange={(e) => setPassword(e.target.value)} // Update state on change
               />
               <Button onClick={togglePasswordVisibility} variant="outline">
                 {showPassword ? <FaEye /> : <FaEyeSlash />}
