@@ -125,6 +125,24 @@ def get_all_shelters():
 
     return jsonify(shelter_list), 200
 
+
+@shelter_bp.route('/<int:shelter_id>/find-shelter', methods=['GET'])
+def get_shelter_by_id(shelter_id):
+    shelter = Shelter.query.get(shelter_id)
+    if not shelter:
+        return jsonify({"error": "Shelter not found"}), 404
+    return jsonify({
+        "id": shelter.id,
+        "name": shelter.name,
+        "address": shelter.address,
+        "latitude": shelter.latitude,
+        "longitude": shelter.longitude,
+        "capacity": shelter.capacity,
+        "current_occupancy": shelter.current_occupancy
+    })
+
+
+
 @shelter_bp.route('/<int:shelter_id>/provider', methods=['GET'])
 def get_provider_from_shelter(shelter_id):
     shelter = Shelter.query.get(shelter_id)
@@ -148,4 +166,3 @@ def get_provider_from_shelter(shelter_id):
     }), 200
     
     
-        
