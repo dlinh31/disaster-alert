@@ -56,6 +56,9 @@ def register():
             db.session.add(provider_profile)
 
         db.session.commit()
+        
+        access_token = create_access_token(
+            identity={"id": new_user.id, "role": new_user.role})
 
         return jsonify({
             "message": f"{role.capitalize()} registered successfully",
@@ -63,8 +66,10 @@ def register():
                 "id": new_user.id,
                 "name": new_user.name,
                 "email": new_user.email,
+                "phone_number": new_user.phone_number
                 "role": new_user.role
-            }
+            },
+            "access_token": access_token
         }), 201
 
     except Exception as e:
@@ -74,7 +79,6 @@ def register():
 
 @user_bp.route('/login', methods=['POST'])
 def login():
-    
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
@@ -87,7 +91,16 @@ def login():
     access_token = create_access_token(
         identity={"id": user.id, "role": user.role})
 
-    return jsonify({"access_token": access_token}), 200
+    return jsonify({
+        "message": "Login successful",
+        "access_token": access_token,
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "role": user.role
+        }
+    }), 200
 
 
 @user_bp.route('/<int:user_id>/profile', methods=['GET'])
