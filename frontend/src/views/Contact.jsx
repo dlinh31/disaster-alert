@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import { Box, Button, Flex, Heading, Text, Image } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import ManImage from '../assets/man.jpg';
 
 function Contact() {
     const navigate = useNavigate();
@@ -47,7 +48,7 @@ function Contact() {
                 >
                    
                     <Image
-                        src="https://via.placeholder.com/150"
+                        src={ManImage}
                         alt="Profile"
                         boxSize="150px"
                         borderRadius="full"
@@ -73,7 +74,7 @@ function Contact() {
                         variant="outline"
                         marginTop="4"
                     >
-                        Contact
+                        Message
                     </Button>
                     </Box>
                 </Box>
