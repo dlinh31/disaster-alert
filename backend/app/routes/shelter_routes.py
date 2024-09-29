@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.models import Shelter, ProviderProfile, db
+from app.models import Shelter, ProviderProfile, User, db
 
 shelter_bp = Blueprint('shelter', __name__)
 
@@ -124,3 +124,28 @@ def get_all_shelters():
         })
 
     return jsonify(shelter_list), 200
+
+@shelter_bp.route('/<int:shelter_id>/provider', methods=['GET'])
+def get_provider_from_shelter(shelter_id):
+    shelter = Shelter.query.get(shelter_id)
+    if not shelter:
+        return jsonify({"error": "Shelter not found"}), 404
+
+    provider = shelter.provider
+    if not provider:
+        return jsonify({"error": "Provider not found"}), 404
+    
+    user = User.query.get(provider.user_id)
+
+    return jsonify({
+        "provider_id": provider.id,
+        "organization_name": provider.organization_name,
+        "address": provider.address,
+        "user_id": provider.user_id,
+        "name": user.name,
+        "phone_number": user.phone_number,
+        "email": user.email
+    }), 200
+    
+    
+        
