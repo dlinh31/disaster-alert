@@ -7,7 +7,6 @@ import {
   ButtonGroup,
   HStack,
   IconButton,
-  Input,
   Select,
 } from '@chakra-ui/react';
 import {
@@ -17,8 +16,6 @@ import {
   HeatmapLayer,
   InfoWindow,
   Polygon,
-  Circle,
-  Autocomplete,
   DirectionsRenderer,
 } from '@react-google-maps/api';
 import { FaLocationArrow, FaTimes } from 'react-icons/fa';

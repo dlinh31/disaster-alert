@@ -16,14 +16,38 @@ import {
 } from '@chakra-ui/react';
 
 const initialShelterData = [
-  { id: 1, title: 'Shelter Title 1', description: 'A brief description of the shelter.', address: '123 Main St', capacity: 100, occupancy: 50 },
-  { id: 2, title: 'Shelter Title 2', description: 'A brief description of the shelter.', address: '456 Elm St', capacity: 150, occupancy: 80 },
-  { id: 3, title: 'Shelter Title 3', description: 'A brief description of the shelter.', address: '789 Oak St', capacity: 200, occupancy: 120 },
-  { id: 4, title: 'Shelter Title 4', description: 'A brief description of the shelter.', address: '101 Pine St', capacity: 250, occupancy: 180 },
-  { id: 1, title: 'Shelter Title 1', description: 'A brief description of the shelter.', address: '123 Main St', capacity: 100, occupancy: 50 },
-  { id: 2, title: 'Shelter Title 2', description: 'A brief description of the shelter.', address: '456 Elm St', capacity: 150, occupancy: 80 },
-  { id: 3, title: 'Shelter Title 3', description: 'A brief description of the shelter.', address: '789 Oak St', capacity: 200, occupancy: 120 },
-  { id: 4, title: 'Shelter Title 4', description: 'A brief description of the shelter.', address: '101 Pine St', capacity: 250, occupancy: 180 },
+  {
+    id: 1,
+    title: 'Shelter Title 1',
+    description: 'A brief description of the shelter.',
+    address: '123 Main St',
+    capacity: 100,
+    occupancy: 50,
+  },
+  {
+    id: 2,
+    title: 'Shelter Title 2',
+    description: 'A brief description of the shelter.',
+    address: '456 Elm St',
+    capacity: 150,
+    occupancy: 80,
+  },
+  {
+    id: 3,
+    title: 'Shelter Title 3',
+    description: 'A brief description of the shelter.',
+    address: '789 Oak St',
+    capacity: 200,
+    occupancy: 120,
+  },
+  {
+    id: 4,
+    title: 'Shelter Title 4',
+    description: 'A brief description of the shelter.',
+    address: '101 Pine St',
+    capacity: 250,
+    occupancy: 180,
+  },
 ];
 
 const SheltersCard = () => {
@@ -31,16 +55,10 @@ const SheltersCard = () => {
   const [shelters, setShelters] = useState(initialShelterData);
   const [selectedShelter, setSelectedShelter] = useState(null);
 
-  const handleViewDetails = (shelter) => {
+  const handleViewDetails = shelter => {
     setSelectedShelter(shelter);
     onOpen();
   };
-
-  const handleDeleteShelter = (shelterId) => {
-    // Filter out the deleted shelter from the state
-    setShelters((prevShelters) => prevShelters.filter(shelter => shelter.id !== shelterId));
-  };
-
   return (
     <Box h="100%" paddingTop="5%">
       {/* Search Box */}
@@ -55,7 +73,7 @@ const SheltersCard = () => {
         overflowY="auto" // Allow scrolling for the card list
         justifyContent="flex-start" // Align cards at the start
       >
-        {shelters.map((shelter) => (
+        {shelters.map(shelter => (
           <Box
             key={shelter.id}
             bg="white"
@@ -68,18 +86,6 @@ const SheltersCard = () => {
             <Text>{shelter.description}</Text>
             <Button mt={2} size="sm" onClick={() => handleViewDetails(shelter)}>
               View Details
-            </Button>
-
-            {/* Delete Button in the bottom-right corner */}
-            <Button
-              size="sm"
-              colorScheme="red"
-              position="absolute"
-              bottom="10px"
-              right="10px"
-              onClick={() => handleDeleteShelter(shelter.id)}
-            >
-              Delete
             </Button>
           </Box>
         ))}

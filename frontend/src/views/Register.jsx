@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Box, Button, FormControl, FormLabel, Input, Heading, Text, Flex, InputGroup } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Heading,
+  Text,
+  Flex,
+  InputGroup,
+  useToast, // Import useToast from Chakra UI
+} from '@chakra-ui/react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
+import { useAtom } from 'jotai';
+import { userAtom } from '../state/atoms'; // Import userAtom from your atoms file
 
 function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,43 +30,91 @@ function Register() {
 
   const navigate = useNavigate(); // Hook for navigation
 
+  // State and function to update userAtom
+  const [, setUser] = useAtom(userAtom); // Use setUser to update the userAtom
+
+  // Create a toast instance
+  const toast = useToast();
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   // Function to handle role selection
-  const handleRoleSelection = (role) => {
+  const handleRoleSelection = role => {
     setSelectedRole(role.toLowerCase());
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault(); // Prevent the default form submission
 
     if (!name || !email || !phone || !password || !selectedRole) {
-      alert('Please fill in all fields');
+      toast({
+        title: 'Error',
+        description: 'Please fill in all fields',
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+        position: 'top',
+      });
       return;
     }
-    
+
     try {
-      const response = await axios.post('http://127.0.0.1:5000/api/users/register', {
-        name,
-        email,
-        password,
-        phone,
-        countryCode,
+      const response = await axios.post(
+        'http://127.0.0.1:5000/api/users/register',
+        {
+          name,
+          email,
+          password,
+          phone,
+          role: selectedRole,
+        }
+      );
+
+      console.log(response.data);
+
+      // Show success toast
+      toast({
+        title: 'Registration Successful',
+        description: 'You have registered successfully!',
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+        position: 'top',
+      });
+
+      // Set the user data to userAtom after successful registration
+      setUser({
+        name: name,
+        email: email,
+        phone: phone,
         role: selectedRole,
       });
-  
-      console.log(response.data);
-      alert('Register successfully!\nClick OK to dismiss this alert.');
-      navigate('/login');
+
+      // Navigate to login or another page after setting the user data
+      navigate('/');
     } catch (error) {
       console.log('Error:', error);
+
+      // Show error toast in case of failure
+      toast({
+        title: 'Error',
+        description: 'Failed to register. Please try again later.',
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+        position: 'top',
+      });
     }
   };
 
   return (
-    <Box className="flex justify-center items-center bg-gray-800" width="100vw" height="100vh">
+    <Box
+      className="flex justify-center items-center bg-gray-800"
+      width="100vw"
+      height="100vh"
+    >
       <Box className="bg-white p-6 rounded-lg w-80">
         {/* If the role is not selected, show role selection */}
         {!selectedRole ? (
@@ -96,7 +157,7 @@ function Register() {
                   name="name"
                   variant="outline"
                   value={name}
-                  onChange={(e) => setName(e.target.value)} // Capture name input
+                  onChange={e => setName(e.target.value)} // Capture name input
                 />
               </FormControl>
 
@@ -111,7 +172,7 @@ function Register() {
                   name="email"
                   variant="outline"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)} // Capture email input
+                  onChange={e => setEmail(e.target.value)} // Capture email input
                 />
               </FormControl>
 
@@ -124,7 +185,7 @@ function Register() {
                     placeholder="+1"
                     width="4rem"
                     value={countryCode}
-                    onChange={(e) => setCountryCode(e.target.value)} // Allow typing of country code
+                    onChange={e => setCountryCode(e.target.value)} // Allow typing of country code
                   />
                   <Input
                     type="tel"
@@ -133,7 +194,7 @@ function Register() {
                     variant="outline"
                     flex="1"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)} // Capture phone input
+                    onChange={e => setPhone(e.target.value)} // Capture phone input
                   />
                 </InputGroup>
               </FormControl>
@@ -151,7 +212,7 @@ function Register() {
                     flex="1"
                     mr={2}
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)} // Capture password input
+                    onChange={e => setPassword(e.target.value)} // Capture password input
                   />
                   <Button onClick={togglePasswordVisibility} variant="outline">
                     {showPassword ? <FaEye /> : <FaEyeSlash />}
