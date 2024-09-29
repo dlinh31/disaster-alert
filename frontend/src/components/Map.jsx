@@ -153,7 +153,7 @@ function Map({ disasterData, shelters }) {
       h="90vh"
       w="100vw"
     >
-      <Box position="absolute" left={0} top={0} h="100%" w="100%">
+      <Box position="absolute" left={0} top={0} h="100%" w="100%" zIndex={0}>
         <GoogleMap
           center={mapCenter}
           zoom={8}

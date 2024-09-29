@@ -25,9 +25,11 @@ def create_app():
     from .routes.user_routes import user_bp
     from .routes.flood_alerts_routes import flood_alert_bp
     from .routes.shelter_routes import shelter_bp
+    from .routes.chat_bot_routes import chat_bot_bp
 
     app.register_blueprint(flood_alert_bp, url_prefix='/api/alerts')
     app.register_blueprint(user_bp, url_prefix='/api/users')
     app.register_blueprint(shelter_bp, url_prefix='/api/shelters')
+    app.register_blueprint(chat_bot_bp, url_prefix='/api/chatbot')
 
     return app
