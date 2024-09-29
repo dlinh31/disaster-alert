@@ -72,7 +72,6 @@ function Register() {
         }
       );
 
-
       // Show success toast
       toast({
         title: 'Registration Successful',
@@ -87,7 +86,7 @@ function Register() {
       setUser(response.data.user);
 
       // Navigate to login or another page after setting the user data
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.error('Error:', error);
 

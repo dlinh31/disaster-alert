@@ -4,7 +4,7 @@ import { Box, Button, Flex, Heading, Text, Image } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { selectedShelterAtom } from '../state/atoms';
-import pfp from '../assets/pfp.png'
+import pfp from '../assets/pfp.png';
 function Contact() {
   const { shelterId } = useParams(); // Get shelterId from URL
   const [selectedShelter] = useAtom(selectedShelterAtom); // Get selected shelter data from global state
@@ -70,12 +70,7 @@ function Contact() {
           justifyContent="space-around" // Ensure content is spaced evenly
           width={['80%', '80%', '35%']} // Full width on small screens, 45% on larger screens
         >
-          <Image
-            src={pfp}
-            alt="Profile"
-            boxSize="150px"
-            borderRadius="full"
-          />
+          <Image src={pfp} alt="Profile" boxSize="150px" borderRadius="full" />
           <Box display="flex" flexDirection="column" alignItems="center">
             <Heading marginTop="2" textAlign="center">
               {providerInfo ? providerInfo.name : 'Loading...'}
@@ -84,10 +79,14 @@ function Contact() {
               Phone Number: {providerInfo ? providerInfo.phone : 'Loading...'}
             </Text>
             <Text marginTop="2" textAlign="center">
-              Email: {providerInfo ? providerInfo.email : 'Loading...'}
+              Email: 
+              <a href={`mailto:${providerInfo ? providerInfo.email : '#'}`}>
+                {providerInfo ? providerInfo.email : 'Loading...'}
+              </a>
             </Text>
             <Text marginTop="2" textAlign="center">
-              Phone number: {providerInfo ? providerInfo.phone_number : 'Loading...'}
+              Phone number:{' '}
+              {providerInfo ? providerInfo.phone_number : 'Loading...'}
             </Text>
             <Button colorScheme="blue" variant="outline" marginTop="4">
               Contact
