@@ -83,7 +83,7 @@ const Header = () => {
                 mr={2}
               />
               <Text fontSize="xl" fontWeight="bold" color="blue.600">
-                Hurricanify
+                SheltrNow
               </Text>
             </Box>
             <HStack
@@ -193,7 +193,7 @@ const Header = () => {
                   <MenuItem onClick={() => navigate('/settings')}>
                     Settings
                   </MenuItem>
-                  <MenuItem onClick={() => navigate('/logout')}>
+                  <MenuItem onClick={() => navigate('/')}>
                     Logout
                   </MenuItem>
                 </>
