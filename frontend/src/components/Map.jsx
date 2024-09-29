@@ -23,6 +23,7 @@ import {
 } from '@react-google-maps/api';
 import { FaLocationArrow, FaTimes } from 'react-icons/fa';
 
+import { findNearestShelter } from '../utils/utils';
 import { useEffect, useState, useRef } from 'react';
 import { useAtom } from 'jotai';
 import PropTypes from 'prop-types';
@@ -147,20 +148,21 @@ function Map({ disasterData, shelters }) {
 
   // Handle when a marker is selected
   useEffect(() => {
-    if (!selectedMarker || !map) return;
+    if (!map) return;
 
-    // Ensure the selectedMarker's position is valid before using panTo
-    if (
-      selectedMarker.position &&
-      typeof selectedMarker.position.lat === 'number' &&
-      typeof selectedMarker.position.lng === 'number'
-    ) {
+    if (!selectedMarker) {
+      // Clear heatmapData and polygonData when selectedMarker is null
+      setHeatmapData([]);
+      setPolygonData([]);
+      return;
+    }
+
+    // Pan to the selected marker's position
+    if (selectedMarker.position) {
       map.panTo(selectedMarker.position);
     }
 
     // Set the heatmap data and polygon data
-    setHeatmapData([]);
-    setPolygonData([]);
     const heatmapPoints = selectedMarker.coordinates.map(coord => ({
       location: new window.google.maps.LatLng(coord.lat, coord.lng),
       weight: 1,
@@ -171,9 +173,13 @@ function Map({ disasterData, shelters }) {
 
   // Function to handle marker clicks
   const handleMarkerClick = marker => {
+    setHeatmapData([]);
+    setPolygonData([]);
     setSelectedMarker(marker);
   };
   const handleShelterMarkerClick = shelter => {
+    setHeatmapData([]);
+    setPolygonData([]);
     setSelectedShelter(shelter);
   };
 
@@ -212,43 +218,6 @@ function Map({ disasterData, shelters }) {
     originRef.current.value = '';
     setSelectedDestinationShelterId('');
   }
-
-  const findNearestShelter = (userLocation, shelters) => {
-    let minDistance = Infinity;
-    let nearestShelter = null;
-
-    shelters.forEach(shelter => {
-      const distance = computeDistance(userLocation, shelter.position);
-      if (distance < minDistance) {
-        minDistance = distance;
-        nearestShelter = shelter;
-      }
-    });
-
-    return nearestShelter;
-  };
-
-  const computeDistance = (coord1, coord2) => {
-    const toRad = value => (value * Math.PI) / 180;
-
-    const lat1 = coord1.lat;
-    const lon1 = coord1.lng;
-    const lat2 = coord2.lat;
-    const lon2 = coord2.lng;
-
-    const R = 6371e3; // Earth's radius in meters
-    const φ1 = toRad(lat1);
-    const φ2 = toRad(lat2);
-    const Δφ = toRad(lat2 - lat1);
-    const Δλ = toRad(lon2 - lon1);
-
-    const a =
-      Math.sin(Δφ / 2) ** 2 +
-      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return R * c; // Distance in meters
-  };
 
   const findNearestShelterAndCalculateRoute = () => {
     if (!userLocation || shelterMarkers.length === 0) {
@@ -341,7 +310,7 @@ function Map({ disasterData, shelters }) {
             />
           ))}
 
-          {selectedMarker && selectedMarker.id && (
+          {selectedMarker && (
             <InfoWindow
               position={selectedMarker.position}
               onCloseClick={() => setSelectedMarker(null)}
