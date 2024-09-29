@@ -4,7 +4,7 @@ import Map from '../components/Map';
 import DisasterCard from '../components/DisasterCard';
 import Navbar from '../components/Navbar';
 import Chatbot from '../components/ChatBot';
-import { Grid, GridItem } from '@chakra-ui/react';
+import { Grid, GridItem, Box } from '@chakra-ui/react';
 
 // Helper function to convert the coordinates string into an array of LatLng objects
 function convertCoordinates(coordString) {
@@ -93,10 +93,18 @@ const Home = () => {
       <GridItem area={'header'}>
         <Navbar />
       </GridItem>
-      <GridItem area={'nav'}>
-        <DisasterCard disasterData={disasterData} />
-      </GridItem>
-      <GridItem area={'main'}  mt={16} position="relative">
+
+      {/* Updated nav area to ensure proper scrolling */}
+      <GridItem
+  area={'nav'}
+  maxHeight="100vh"
+  overflowY="auto" // Enable vertical scrolling when content overflows
+>
+  <DisasterCard disasterData={disasterData} />
+</GridItem>
+
+
+      <GridItem area={'main'} position="relative">
         <Map disasterData={disasterData} shelters={shelters} />
 
         {/* Chatbot floating on top of the map */}

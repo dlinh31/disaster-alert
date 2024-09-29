@@ -74,7 +74,7 @@ const DisasterCard = ({ disasterData }) => {
   });
 
   return (
-    <Box h="100vh" overflowY="hidden">
+    <Box h="90vh" overflowY="hidden">
       <Flex
         justifyContent="center"
         alignItems="center"
@@ -147,7 +147,7 @@ const DisasterCard = ({ disasterData }) => {
 
       <Flex
         flexDirection="column"
-        height="calc(100vh - 64px)"
+        height="50vh"
         overflowY="auto"
         p="4"
       >

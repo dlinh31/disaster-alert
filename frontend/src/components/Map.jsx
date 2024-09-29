@@ -244,6 +244,7 @@ function Map({ disasterData, shelters }) {
       alignItems="center"
       h="90vh"
       w="80vw"
+      marginBottom="100px"
     >
       <Box position="absolute" left={0} top={0} h="100%" w="100%" zIndex={0}>
         <GoogleMap

@@ -1,6 +1,5 @@
 import React from 'react';
 import stormImage from '../assets/Tropical-Storm-vs-Hurricane-What_s-the-Difference.jpeg'; // Adjust the path based on your directory structure
-import Header from '../components/Navbar'; // Ensure correct import
 import { Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
