@@ -11,6 +11,7 @@ import Login from './views/Login';
 import Register from './views/Register';
 import UserProfile from './views/UserProfile';
 import FirstPage from './views/FirstPage';
+import Contact from './views/Contact';
 
 // Correct the route structure
 const router = createBrowserRouter(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
       <Route path="/register" element={<Register />} />
       <Route path="/user" element={<UserProfile />} />
       <Route path="/" element={<FirstPage />} />
+      <Route path="/contact/:shelterId" element={<Contact />} />
     </>
   )
 );

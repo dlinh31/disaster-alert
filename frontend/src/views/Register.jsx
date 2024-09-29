@@ -67,7 +67,7 @@ function Register() {
           name,
           email,
           password,
-          phone,
+          phone_number: phone,
           role: selectedRole,
         }
       );

@@ -19,6 +19,7 @@ import {
   DirectionsRenderer,
 } from '@react-google-maps/api';
 import { FaLocationArrow, FaTimes } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 import { findNearestShelter } from '../utils/utils';
 import { useEffect, useState, useRef } from 'react';
@@ -209,6 +210,8 @@ function Map({ disasterData, shelters }) {
   }
 
   function clearRoute() {
+    setIsFindRoute(false);
+
     setDirectionsResponse(null);
     setDistance('');
     setDuration('');
@@ -231,6 +234,12 @@ function Map({ disasterData, shelters }) {
     calculateRoute();
   };
 
+  const navigate = useNavigate();
+
+  const handleContactShelter = shelter => {
+    navigate(`/contact/${shelter.id}`); // Navigate to /contact/{shelterId}
+  };
+
   if (!isLoaded) {
     return <SkeletonText />;
   }
@@ -242,6 +251,7 @@ function Map({ disasterData, shelters }) {
       alignItems="center"
       h="90vh"
       w="80vw"
+      marginBottom="100px"
     >
       <Box position="absolute" left={0} top={0} h="100%" w="100%" zIndex={0}>
         <GoogleMap
@@ -370,6 +380,18 @@ function Map({ disasterData, shelters }) {
                   <strong>Current Occupancy:</strong>{' '}
                   {selectedShelter.currentOccupancy}
                 </Text>
+                <Button
+                  mt={2}
+                  size="sm"
+                  fontSize="sm"
+                  colorScheme="blue"
+                  variant="outline"
+                  onClick={() => {
+                    handleContactShelter(selectedShelter);
+                  }}
+                >
+                  Contact shelter
+                </Button>
               </div>
             </InfoWindow>
           )}
