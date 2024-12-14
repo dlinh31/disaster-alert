@@ -31,14 +31,12 @@ const SheltersCard = () => {
 
   useEffect(() => {
     // Fetch shelters from the API
-    console.log('user.id: ', user);
     const fetchShelters = async () => {
       if (user.id === -1) return;
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/shelters/${user.id}/get-shelter`
         );
-        console.log(response.data);
         setShelters(response.data);
         setFilteredShelters(response.data);
         setIsLoading(false);

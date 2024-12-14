@@ -100,7 +100,6 @@ const UserDash = () => {
             longitude: shelterCoordinates ? shelterCoordinates.lng : null, // Send longitude
           };
           // Make POST request to add the shelter using the user’s ID
-          console.log('Adding shelter:', newShelter);
           const response = await axios.post(
             `${import.meta.env.VITE_BASE_URL}/api/shelters/${user.id}/add-shelter`,
             // `${import.meta.env.VITE_BASE_URL}/api/shelters/1/add-shelter`,

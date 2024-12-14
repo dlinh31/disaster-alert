@@ -67,7 +67,6 @@ function Map({ disasterData, shelters }) {
   const destiantionRef = useRef();
 
   useEffect(() => {
-    console.log('userLocation:', userLocation);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
