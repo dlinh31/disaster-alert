@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import stormImage from '../assets/Tropical-Storm-vs-Hurricane-What_s-the-Difference.jpeg'; // Adjust the path based on your directory structure
 import { Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { userAtom } from '../state/atoms'; // Import the userAtom from your atom file
+import { userAtom } from '../state/atoms';
+import axios from 'axios';
 function FirstPage() {
   const navigate = useNavigate();
-  const [user] = useAtom(userAtom); // Get the user data from the atom
+  const [user] = useAtom(userAtom);
   const handleNavigateHome = () => {
     if (!user || user.id == -1) {
       navigate('/login');
@@ -14,6 +15,20 @@ function FirstPage() {
       navigate('/home');
     }
   };
+  const fetchDataToDB = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/api/alerts/fetch-flood-warnings`,
+      );
+    } catch (error) {
+      console.error(error);
+    }
+    
+  }
+  useEffect(() => {
+    fetchDataToDB();
+  }, []);
+  
 
   return (
     <div

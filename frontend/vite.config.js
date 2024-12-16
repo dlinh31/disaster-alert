@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://127.0.0.1:5001', // Forward API calls to Flask backend
+      '/api': `${import.meta.env.VITE_BASE_URL}`, // Forward API calls to Flask backend
     },
   },
 });
